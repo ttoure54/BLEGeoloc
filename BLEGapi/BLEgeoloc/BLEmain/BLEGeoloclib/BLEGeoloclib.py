@@ -26,20 +26,20 @@ class BLEGeoloc_calculation():
 
     def __init__(self):
 
-        self.Becons1 = {"LAT":48.98441447913894, "LONG":1.7035273579066978}
-        self.Becons2 = {"LAT":48.984383898526396, "LONG":1.7035698229991323}
-        self.Becons3 = {"LAT":48.98441292521372, "LONG":1.703529669313517}
+        self.Becons1 = {"X":0, "Y":0}
+        self.Becons2 = {"X":0.85, "Y":1.1}
+        self.Becons3 = {"X":1.2, "Y":0.75}
 
-        self.Becons1_sq = {"LAT":48.98441447913894**2, "LONG":1.7035273579066978**2}
-        self.Becons2_sq = {"LAT":48.984383898526396**2, "LONG":1.7035698229991323**2}
-        self.Becons3_sq = {"LAT":48.98441292521372**2, "LONG":1.703529669313517**2}
+        self.Becons1_sq = {"X":0, "Y":0}
+        self.Becons2_sq = {"X":(0.85)**2, "Y":(1.1)**2}
+        self.Becons3_sq = {"X":(1.2)**2, "Y":(0.75)**2}
 
-        self.P_d0 = 20 #Power in dbm at 1 leter distance
-        self.n = 5 #signal propagation constant 
+        self.P_d0 = -37 #Power in dbm at 1 leter distance
+        self.n = 1 #signal propagation constant 
     
-        self.side_b1b2 = 45
-        self.side_b2b3 = 55
-        self.side_b3b1 = 65
+        self.side_b1b2 = 1.39
+        self.side_b2b3 = 0.49
+        self.side_b3b1 = 1.42
     
 
     def trilateration(self,RSSI1, RSSI2, RSSI3):
@@ -50,29 +50,29 @@ class BLEGeoloc_calculation():
         d3_sq =self.RSSItoD(RSSI3)**2
 
 
-        X_num_P1 = (self.Becons1_sq["LAT"]+self.Becons1_sq["LONG"]-d1_sq)*(self.Becons3["LONG"]-self.Becons2["LONG"])
-        X_num_P2 = (self.Becons2_sq["LAT"]+self.Becons2_sq["LONG"]-d2_sq)*(self.Becons1["LONG"]-self.Becons3["LONG"])
-        X_num_P3 = (self.Becons3_sq["LAT"]+self.Becons3_sq["LONG"]-d3_sq)*(self.Becons2["LONG"]-self.Becons1["LONG"])
+        X_num_P1 = (self.Becons1_sq["X"]+self.Becons1_sq["Y"]-d1_sq)*(self.Becons3["Y"]-self.Becons2["Y"])
+        X_num_P2 = (self.Becons2_sq["X"]+self.Becons2_sq["Y"]-d2_sq)*(self.Becons1["Y"]-self.Becons3["Y"])
+        X_num_P3 = (self.Becons3_sq["X"]+self.Becons3_sq["Y"]-d3_sq)*(self.Becons2["Y"]-self.Becons1["Y"])
 
         X_num = X_num_P1 + X_num_P2 + X_num_P3
        
-        X_denum_P1 = self.Becons1["LAT"]*(self.Becons3["LONG"]-self.Becons2["LONG"])
-        X_denum_P2 = self.Becons2["LAT"]*(self.Becons1["LONG"]-self.Becons3["LONG"])
-        X_denum_P3 = self.Becons3["LAT"]*(self.Becons2["LONG"]-self.Becons1["LONG"])
+        X_denum_P1 = self.Becons1["X"]*(self.Becons3["Y"]-self.Becons2["Y"])
+        X_denum_P2 = self.Becons2["X"]*(self.Becons1["Y"]-self.Becons3["Y"])
+        X_denum_P3 = self.Becons3["X"]*(self.Becons2["Y"]-self.Becons1["Y"])
 
         X_denum = 2*(X_denum_P1+X_denum_P2+X_denum_P3)
         X= X_num/X_denum
 
 
-        Y_num_P1 = (self.Becons1_sq["LAT"]+self.Becons1_sq["LONG"]-d1_sq)*(self.Becons3["LAT"]-self.Becons2["LAT"])
-        Y_num_P2 = (self.Becons2_sq["LAT"]+self.Becons2_sq["LONG"]-d2_sq)*(self.Becons1["LAT"]-self.Becons3["LAT"])
-        Y_num_P3 = (self.Becons3_sq["LAT"]+self.Becons3_sq["LONG"]-d3_sq)*(self.Becons2["LAT"]-self.Becons1["LAT"])
+        Y_num_P1 = (self.Becons1_sq["X"]+self.Becons1_sq["Y"]-d1_sq)*(self.Becons3["X"]-self.Becons2["X"])
+        Y_num_P2 = (self.Becons2_sq["X"]+self.Becons2_sq["Y"]-d2_sq)*(self.Becons1["X"]-self.Becons3["X"])
+        Y_num_P3 = (self.Becons3_sq["X"]+self.Becons3_sq["Y"]-d3_sq)*(self.Becons2["X"]-self.Becons1["X"])
 
         Y_num = Y_num_P1 + Y_num_P2 + Y_num_P3
        
-        Y_denum_P1 = self.Becons1["LONG"]*(self.Becons3["LAT"]-self.Becons2["LAT"])
-        Y_denum_P2 = self.Becons2["LONG"]*(self.Becons1["LAT"]-self.Becons3["LAT"])
-        Y_denum_P3 = self.Becons3["LONG"]*(self.Becons2["LAT"]-self.Becons1["LAT"])
+        Y_denum_P1 = self.Becons1["Y"]*(self.Becons3["X"]-self.Becons2["X"])
+        Y_denum_P2 = self.Becons2["Y"]*(self.Becons1["X"]-self.Becons3["X"])
+        Y_denum_P3 = self.Becons3["Y"]*(self.Becons2["X"]-self.Becons1["X"])
 
         print ("LOG LIB", Y_denum_P1)
         print ("LOG LIB", Y_denum_P2)
@@ -83,7 +83,7 @@ class BLEGeoloc_calculation():
         print ("LOG LIB", Y_denum)
         Y= Y_num/Y_denum
 
-        return {"LONGITUDE":X, "LATITUDE":Y}
+        return {"X":X, "Y":Y}
     
 
     def RSSItoD(self,RSSI):

@@ -1,7 +1,12 @@
 # BLEGeoloc
 
-This project aims to define and display the indoor position of user on his/her phone application thanks to bluetooth module with fixed position.
+This project aims to define and display the indoor position of user on his/her phone application thanks to bluetooth beacons with fixed positions.
 We also developed an administration interface to configure the fixed BLE module positions and manage access.
+
+iOS application 
+
+![Alt text](readme_img/mainview.png?raw=true "Main View")
+![Alt text](readme_img/positionview.png?raw=true "Position View")
 
 ## Description
 
